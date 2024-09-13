@@ -12,7 +12,7 @@ This IOx application serves as a base platform for users who want to remotely ac
 You can install the Car Diagnostics IOx Application in two ways:
 
 ### Using the Pre-built Application Package
-1. Download the pre-built package from the Releases section.
+1. Download the pre-built package from the Releases section. [Visit GitHub!](https://github.com/IoTOpenSource/IOx-Canbus/releases/tag/Appliacation)
 2. Follow the standard procedure to deploy an IOx application on your Cisco router (see Cisco's official documentation for details).
 3.  Ensure port 9000 is open and assigned for this application's use on your router. This port is used for accessing the application interface remotely.
 
