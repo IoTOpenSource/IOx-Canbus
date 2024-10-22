@@ -19,7 +19,7 @@ Before you begin, make sure that you have:
 
 ### Step 1: Download the Application Package
 
-1. Visit the [Releases section](https://github.com/) of this repository and download the latest **Car Diagnostics IOx Application** package.
+1. Visit the [Releases section](https://github.com/IoTOpenSource/IOx-Canbus/releases/tag/Appliacation) of this repository and download the latest **Car Diagnostics IOx Application** package.
    
 2. Follow the standard procedure to deploy an IOx application on your Cisco router:
    - Refer to Cisco’s [official documentation](https://developer.cisco.com/docs/iox/#!iox/overview) for a detailed process on how to upload and install the application using the IOx Local Manager.
@@ -38,24 +38,19 @@ To ensure the application functions correctly and can be accessed remotely, you 
 
 3. **Assign the Port in the Router’s Configuration**
    Open the CLI and use the following command examples to configure port `9001` and other necessary ports:
-
-ip nat inside source static tcp <internal_ip_address> 9001 interface <interface_name> 9001 ip access-list extended APP-PORT-9001 10 permit tcp any host <internal_ip_address> eq 9001
-
-markdown
-Copy code
+   ```bash
+      ip nat inside source static tcp 192.168.1.22 9001 interface GigabitEthernet0/0/0 9001
+      ip access-list extended APP-PORT-9001
+      10 permit tcp any host 192.168.1.22 eq 9001
+   
 
 **Example for additional port configurations**:
-- **Port 9000** for NMEA communication:  
-ip nat inside source static tcp <internal_ip_address> 9000 interface <interface_name> 9000 ip access-list extended APP-PORT-9000 10 permit tcp any host <internal_ip_address> eq 9000
-
-markdown
-Copy code
-
-- **Port 9002** for additional services:  
-ip nat inside source static tcp <internal_ip_address> 9002 interface <interface_name> 9002 ip access-list extended APP-PORT-9002 10 permit tcp any host <internal_ip_address> eq 9002
-
-yaml
-Copy code
+- **Port 9001** for NMEA communication:
+  ```bash
+  conf termso
+  ip nat inside source static tcp <internal_ip_address> 9001 interface <interface_name> 9001
+  ip access-list extended APP-PORT-9001
+  10 permit tcp any host <internal_ip_address> eq 9001
 
 Replace `<internal_ip_address>` and `<interface_name>` with the appropriate values for your network setup.
 
@@ -67,13 +62,12 @@ If you are configuring any network security policies for accessing the Car Diagn
 
 1. **Access Group Matching**
 - Match the ports that the application is using with access groups to ensure proper security control. Example:
-match access-group name APP-PORT-9000 match access-group name APP-PORT-9001 match access-group name APP-PORT-9002
+  ```bash
+     match access-group name APP-PORT-9001
 
-yaml
-Copy code
 
 2. **Firewall Rules**
-- Ensure that firewall rules allow inbound traffic to the router on the specified ports (9000, 9001, 9002) based on the application’s services.
+- Ensure that firewall rules allow inbound traffic to the router on the specified port (9001) based on the application’s services.
 
 ---
 
@@ -85,9 +79,9 @@ Once the application is installed and network configurations are applied, you ca
 
 Example:
 http://<router_ip>:9001
+or 
+https://<router_ip>:9001
 
-yaml
-Copy code
 
 2. Make sure the application interface loads correctly and all diagnostic services are available.
 
@@ -103,13 +97,10 @@ Copy code
 ## Example Network Policy for NMEA Traffic (Dead-Reckoning)
 
 To handle UDP-based NMEA (National Marine Electronics Association) traffic for dead-reckoning scenarios, you can configure your network as follows:
-
-dead-reckoning nmea udp <source_ip_address> <destination_ip_address> 9000
-
-yaml
-Copy code
-
-This setup forwards UDP traffic from `<source_ip_address>` to the application on `<destination_ip_address>` at port `9000`.
+```bash
+   dead-reckoning nmea udp <source_ip_address> <destination_ip_address> 9001
+```
+This setup forwards UDP traffic from `<source_ip_address>` to the application on `<destination_ip_address>` at port `9001`.
 
 ---
 
