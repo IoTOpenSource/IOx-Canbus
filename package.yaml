@@ -1,0 +1,31 @@
+descriptor-schema-version: "2.15"
+info:
+  name: vehicle-obd2
+  version: "01.05"
+  description: "Sagar Patel, Corey Poulish, The University of Adelaide"
+app:
+  cpuarch: aarch64
+  env:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  resources:
+    cpu: "250"
+    memory: "384"
+    disk: "200"
+    canbus: yes
+    network:
+      - interface-name: eth0
+        ports: 
+          tcp: ["9000"]
+    devices:
+      - label: IR_GPS
+        type: serial
+        usage: "GPS"
+    profile: custom
+  startup:
+    rootfs: obd2v4.tar
+    runtime_options: "--hostname Canbus-OBD2demo.local"
+    target:
+      - /bin/sh
+      - -c
+      - /startup.sh
+  type: docker
