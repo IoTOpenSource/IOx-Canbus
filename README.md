@@ -12,6 +12,9 @@ Before you begin, make sure that you have:
 2. Access to the router’s configuration interface (CLI or Web).
 3. The Car Diagnostics IOx Application package (pre-built).
 4. A basic understanding of Cisco networking commands.
+   or
+   if wants to make application using your own
+6. IOxclient installed on your development machine.
 
 ---
 
@@ -103,18 +106,77 @@ To handle UDP-based NMEA (National Marine Electronics Association) traffic for d
 This setup forwards UDP traffic from `<source_ip_address>` to the application on `<destination_ip_address>` at port `9001`.
 
 ---
-
-## Conclusion
-
 By following the above steps, you should be able to successfully install and configure the Car Diagnostics IOx application on your Cisco router. Make sure to assign the correct ports, configure network settings properly, and apply appropriate security policies to ensure smooth operation.
+
+
+# Developer setup and Building from Source
+
+
+### First Install IOxclient:
+
+1. Download IOxclient:
+
+Visit the [Cisco Developer Hub](https://developer.cisco.com/docs/iox/) and download the appropriate IOxclient version for your OS.
+
+2. Install IOxclient:
+
+Follow the installation instructions on the Cisco site for your OS.
+Once installed, verify it by running:
+```bash
+   ioxclient version
+```
+3. Configure IOxclient:
+
+Set up IOxclient by configuring your local environment. Run the following command and provide the required details (e.g., router IP, username, password):
+```bash
+ioxclient setup
+```
 
 ### Building from Source
 1. Clone this repository:
    ```bash
    https://github.com/IoTOpenSource/IOx-Canbus.git
+
 2. Navigate to the cloned directory:
    ```bash
    cd IOx-Canbus
+   
 3. Build your docker.
-4. Use the IOx client tools to package your Docker image into an IOx application package.
-5. Deploy the packaged application to your Cisco router.
+- The Car Diagnostics IOx application runs in a Docker container. To build the Docker image locally:
+      Ensure Docker is installed on your development machine. Refer to Docker's official installation guide if needed.
+      Build the Docker image by running the following command inside the cloned repository directory:
+  ```bash
+  docker build -t car-diagnostics-iox .
+  ```
+  This command creates a Docker image tagged as car-diagnostics-iox.
+
+
+5. Organize Project Files
+     Create the Project Directory:
+      Inside your cloned repository directory, create a new folder (e.g., iox_package):
+   ```bash
+   mkdir iox_package
+   ```
+6. Copy the Docker Image File:
+Build your Docker image as described previously, then save it as a .tar file:
+```bash
+docker save -o iox_package/obd2v4.tar.tar car-diagnostics-iox
+```
+7. copy yaml and ini file into this folder as well.
+```bash
+mv package.yaml iox_package/package.yaml
+mv package_config.ini iox_package/package_config.ini
+```
+8. Package the Application with IOxclient
+Navigate to the Application Directory:
+```bash
+cd iox_pacakge
+```
+9. Run following to make the IOx application pacakge:
+```bash
+ioxclient pacakge ./
+```
+
+IOxclient will create a pacakge.tar package, which you’ll deploy to the router.
+
+By following these steps, you will have packaged, uploaded, and activated the Car Diagnostics IOx application on your router. This setup ensures efficient management of resources, defined environment variables, and a streamlined deployment process.
