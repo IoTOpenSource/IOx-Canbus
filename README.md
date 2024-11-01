@@ -123,7 +123,7 @@ Visit the [Cisco Developer Hub](https://developer.cisco.com/docs/iox/) and downl
 Follow the installation instructions on the Cisco site for your OS.
 Once installed, verify it by running:
 ```bash
-   ioxclient version
+   ioxclient --version
 ```
 3. Configure IOxclient:
 
@@ -160,7 +160,7 @@ ioxclient setup
 6. Copy the Docker Image File:
 Build your Docker image as described previously, then save it as a .tar file:
 ```bash
-docker save -o iox_package/obd2v4.tar.tar car-diagnostics-iox
+docker save -o iox_package/obd2v4.tar car-diagnostics-iox
 ```
 7. copy yaml and ini file into this folder as well.
 ```bash
